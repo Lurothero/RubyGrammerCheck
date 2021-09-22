@@ -1,3 +1,11 @@
+
+#an enum of what are the limitation of the syntax?
+
+
+
+
+
+
 class Token
 # @@var must be used for variables class
 # @ for variables 
@@ -6,20 +14,13 @@ class Token
 
 =end
 
-
-def _init(self,type,value)
-
-self.type = type
-self.value = value
+def token (idenity, type)
 
 
 
 end
-
-
-def _repr(self,text)
-
-  if self.value 
+ 
+def currentStringToken ()# spits out the current position of the token in an array maybe?
     
 
 

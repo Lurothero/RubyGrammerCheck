@@ -73,7 +73,7 @@ def linklist
   end
 end
 
-class sentence(raw_string_array)
+class sentence(raw_string_array)#UNEXPECTED TOKEN HERE ERR
   def initialize
     @list = linklist.new
 

@@ -125,7 +125,7 @@ def checkTo
   #Keep it simple and add all the bells and whisles After
 
   #TEMP
-  puts @@grammerToArray[0] + "THE VALUE AT 0 INDEX"
+  puts @@grammerToArray[0] + " THE VALUE AT 0 INDEX"
 
   getFirstElement = @@grammerToArray[0]
 
@@ -133,12 +133,53 @@ def checkTo
 
     puts "to <plot_cmd> end"
 
+    #Iterate the array index
+    @@arrayIndex = @@arrayIndex + 1
+
+    checkNextStatement
+
   else
 
     puts "ERROR at pos \'" + @@grammerToArray[0] +"\' not recognized!"
 
   end
   
+
+end
+
+
+def checkNextStatement
+
+  #to keep track of the position, we add the number of characters from the array 0 pos
+
+  countChar = 0
+
+  countChar = countChar + @@grammerToArray[@@arrayIndex].size
+
+
+  puts "We are at: " + countChar.to_s
+
+
+  #now we need to compare the next array part
+  #WE need to determine if the next command is valid
+  #is the next array hbar, vbar, or fill?
+
+  #NOTE WE CAN CHECK TO SEE IF IT JUST ENDS
+
+  if @@grammerToArray[@@arrayIndex] == "end"
+
+    puts "to end"
+    #this will check to see if the next array is valid
+  elsif @@grammerToArray[@@arrayIndex].to_s == "vbar" or "hbar" or "fill"
+
+    puts "to <cmd> end"
+
+
+  end
+
+
+
+
 
 end
 

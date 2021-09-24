@@ -1,3 +1,6 @@
+
+=begin
+
 #linked list data structure
 def linklist 
   # got the code for linklist from 
@@ -87,3 +90,8 @@ class sentence(raw_string_array)#UNEXPECTED TOKEN HERE ERR
     @list.print
   end
 end
+
+
+
+
+=end

@@ -1,29 +1,69 @@
-
-#an enum of what are the limitation of the syntax?
-
+require 'strscan'#import String Scanner
 
 
+class Token #MUST BE CAPITAL
+  #YOU CANNOT OVERLOAD METHODS
 
-
-
-class Token
-# @@var must be used for variables class
-# @ for variables 
-
-=begin
-
-=end
-
-def token (idenity, type)
+  #Create token variables?
+  @@token_var = "VAR"
+  @@token_plus = "PLUS"
+  @@token_minus = "MINUS"
 
 
 
-end
+
+  #Object Variable
+  attr_accessor :type, :value
+
+  
+
+  def Token_initialize(type, value)
+    @type = type
+    @value =value
+
+  end
+
  
-def currentStringToken ()# spits out the current position of the token in an array maybe?
+
+  def Token_Output
+
+      puts @type
+      puts @value
+
+  end
+
+
+
+ 
+
+end#end of class
+
+class Lexar
+
+  attr_accessor :input
+
+
+  def Lexar_Constructor(string_IN)
+    @input = string_IN
+
+
+    #track text
+    string = StringScanner.new(@input)
+
+    #track position
+    pos = string.pos()
+
+    #track current char
+    currentChar = string.charpos()
+
+  end
+
+
+  def Lexar_Advance
+
     
 
 
-end
+  end
 
-end
+end#end of Lexar class

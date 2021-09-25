@@ -1,3 +1,12 @@
+#NOTE THIS FILE IS DEFUNCT
+#NOTE THIS FILE IS DEFUNCT
+#NOTE THIS FILE IS DEFUNCT
+#NOTE THIS FILE IS DEFUNCT
+
+
+=begin
+
+
 require 'strscan'#import String Scanner
 
 
@@ -67,3 +76,6 @@ class Lexar
   end
 
 end#end of Lexar class
+
+
+=end

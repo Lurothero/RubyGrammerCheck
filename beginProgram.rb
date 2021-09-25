@@ -8,11 +8,16 @@ class BeginProgram
 #Grab the input from the user
 def getInput
 
+
+
+
   puts "ENTER GRAMMER RULE"
   @@inputGrammer = gets
-  puts @@inputGrammer
+  #puts @@inputGrammer
 
 
+
+  
   toArray
 
 end
@@ -22,7 +27,7 @@ end
 #save the string input from the user
 def toArray
   @@grammerToArray = @@inputGrammer.split()
-  puts @@grammerToArray
+  #puts @@grammerToArray
 
   grammerChecker
 
@@ -43,19 +48,19 @@ def checkTo
   if   @@grammerToArray[0].to_s == "to"
 
   #  puts "to <plot_cmd> end"
-    puts "to "
+    puts "to IS WORKING FINE" +" THIS IS THE FIRST STEP"
 
     #Iterate the array index
     @@arrayIndex = @@arrayIndex + 1
 
-    return true
+    
 
     checkNextStatement
 
   else
 
     puts "ERROR at pos \'" + @@grammerToArray[0] +"\' not recognized!"
-    return false
+    
 
   end
   
@@ -80,7 +85,8 @@ end
 
 
 #MAKE THIS RECURSIVE 
-def checkNextStatement(_isNext)
+#This need to generate the middle part
+def checkNextStatement
 
   #to keep track of the position, we add the number of characters from the array 0 pos
 
@@ -105,70 +111,123 @@ def checkNextStatement(_isNext)
   #NOTE WE CAN CHECK TO SEE IF IT JUST ENDS
 
   
+#FIRST WE NEED TO LOOP RECURSIVELY for CMD ONLY
+
+#WE already iterate the array counter after confirming to exist
 
 
-    #this will check to see if the next array is valid
-  if @@grammerToArray[@@arrayIndex].to_s == "vbar" or "hbar" or "fill"
+#index already moved
+#isTrue = false
+#while isTrue == false do #MAIN LOOP BODY
 
-    puts "to <cmd> end"
+  #supposely at 1 
 
-    #Iterate the array index
+  #check to see what is the next command and flow from there 
+puts "THE CURRENT ARRAY INDEX IS" + @@arrayIndex.to_s
+  if @@grammerToArray[@@arrayIndex].to_s == "vbar"
+
+    puts "you entered vbar!" 
+    #Now check for the input for the given command
+
     @@arrayIndex = @@arrayIndex + 1
+    checkVbarQuery
 
 
-    
+    elsif @@grammerToArray[@@arrayIndex].to_s == "hbar"
+
+      puts "hbar"
 
 
 
+    elsif @@grammerToArray[@@arrayIndex].to_s == "fill"
+
+      puts "fill"
 
 
-    #Now to check the number input 1 by 1 (unfortunately)
-    #this checks the first char
-    if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
 
-      puts "to " + @@grammerToArray[@@arrayIndex-1].to_s + " <x><y>,<y>"+ " end"
+  end # end of loop
 
 
-    end
+#end #end of do loop
 
-    #checks for y
-    if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+
+
+end#end of method
+
+
+def checkVbarQuery
+
+#the index has already been moved
+
+  #checks the if the first number is valid
+  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
+  
+  
+  
+      puts  @@grammerToArray[@@arrayIndex-1].to_s + " WAS THE LAST ENTRY"
+
+
+  end
+
+  
+  if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
 
       puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 
+  end
 
-    end
+ #checks for ,
+  if @@grammerToArray[@@arrayIndex].to_s[2,1] == ","
 
-    #checks for ,
-    if @@grammerToArray[@@arrayIndex].to_s[2,1] == ","
+    puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] +     ",<y>"+ " end"
 
-      
-
-      puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] +     ",<y>"+ " end"
-
-
-    end
-
-
-     #checks for last y
-    if @@grammerToArray[@@arrayIndex].to_s[3,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
-
-      
-
-      puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] + ","    + @@grammerToArray[@@arrayIndex].to_s[3,1]      + " end"
-
-
-    end
-    
 
   end
 
 
+     #checks for last y
+  if @@grammerToArray[@@arrayIndex].to_s[3,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
 
+      
+
+    puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] + ","    + @@grammerToArray[@@arrayIndex].to_s[3,1]      + " end"
+
+
+  end
+
+     #after successfully checking all 4 values, we look to see of there is a ; THIS indicate we have a new command to process
+
+     #We need to check if the current index length is correct; with this we can safely compare the ;
+  if @@grammerToArray[@@arrayIndex].size == 5 
+
+    if @@grammerToArray[@@arrayIndex].to_s[4,1] == ";"
+
+         puts "WE HAVE A SEMICOLON KEEP GOING!!!"
+
+          #move the counter and keep GOING
+          @@arrayIndex = @@arrayIndex + 1
+          checkNextStatement
+
+        else
+
+          puts "Error at pos: " + "expected ;"
+
+
+        end
+
+      end
+
+    end
+    
 
 
 end
 
+def checkHbarQuery
+
+end
+
+def checkFillQuery
 
 
 end#END OF CLASS

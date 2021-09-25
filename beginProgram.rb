@@ -57,6 +57,9 @@ def checkTo
 
      puts "to <plot_cmd> end" #add this to an array
 
+      #add the sentence to the string 
+    @@constructsentence = @@constructsentence + @@grammerToArray[0].to_s
+    
     #count the position
     @@stringPos = @@stringPos + @@grammerToArray[0].length()
 
@@ -66,19 +69,23 @@ def checkTo
 
     #call the next function
     checkNextStatement
-    
+
     end#end of checkEnd if statement
+
+    
 
   else
 
     puts "ERROR at pos: "+ @@stringPos.to_s +  " \'" +  @@grammerToArray[0].to_s + "\' not recognized!"
 
     #call the function again??
+
     return false
   end#end of if statement
   
 return true
 end#end of checkTo method
+
 def checkEnd
 
   #check to see if the last index is an end
@@ -96,40 +103,38 @@ def checkEnd
 end#end if checkEnd method
 
 
+
 #MAKE THIS RECURSIVE 
 #This need to generate the middle part
 
 def checkNextStatement
-  #create a temp variable to construct the middle part
-
-  stringFormer = ""
 
   #it will iterate auto
 
   if @@grammerToArray[@@arrayIndex].to_s == "vbar"
-    #start to contruct the middle sentence
+
     #We need to determine if the next character contains a ;
 
     if @@grammerToArray[@@arrayIndex+1].to_s.include? ";"
 
       #it has it so continue
+        puts "to <cmd>; < plot_cmd > end"
 
-      #
-        puts "<cmd>; < plot_cmd >"
-        stringFormer = stringFormer + "<cmd>; <plot_cmd> "
-
-    
+    #add the sentence to the string 
+    @@constructsentence = @@constructsentence + @@grammerToArray[@@arrayIndex].to_s
     @@arrayIndex = @@arrayIndex + 1
     checkVbarQuery
 
     else
 
-      puts "<cmd> "
-      
-      stringFormer = stringFormer + "<cmd> "
+      puts "to <cmd> end"
+      #add the sentence to the string 
+      @@constructsentence = @@constructsentence + @@grammerToArray[@@arrayIndex].to_s
+
       @@arrayIndex = @@arrayIndex + 1
       checkVbarQuery
 
+      #it doesnt have it
 
     end#end of ; checker
 
@@ -170,12 +175,16 @@ def checkVbarQuery
 #the index has already been moved
 #check to see if the size is correct
 
-puts "vbar <x><y>,<y> "
+
+
+puts "WE ENTER SOMETHING THAT IS 4-5 CHAR LONG"
 
   #checks the if the first number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex][0,1]) 
   
-    puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
+  
+  
+      puts  @@grammerToArray[@@arrayIndex-1].to_s + " WAS THE LAST ENTRY"
 
   else
 
@@ -185,9 +194,9 @@ puts "vbar <x><y>,<y> "
   end#end of if statement to check for the first input
 
   
-  if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[1,1]) == true
 
-     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
+      puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 
   else
 
@@ -199,11 +208,7 @@ puts "vbar <x><y>,<y> "
  #checks for ,
   if @@grammerToArray[@@arrayIndex].to_s[2,1] == ","
 
-
-    #prob not needed
-
-   # puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + "<y>"
-
+    puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] +     ",<y>"+ " end"
 
   else
 
@@ -213,11 +218,11 @@ puts "vbar <x><y>,<y> "
   end #end of if statement to check for the third input
 
      #checks for FOURTH POS
-  if @@grammerToArray[@@arrayIndex].to_s[3,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[3,1]) == true
 
       
-    puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
-    
+
+    puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] + ","    + @@grammerToArray[@@arrayIndex].to_s[3,1]      + " end"
 
 
   else
@@ -234,9 +239,9 @@ puts "vbar <x><y>,<y> "
 
     if @@grammerToArray[@@arrayIndex].to_s[4,1] == ";"
 
-      puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + ";"
+         puts "WE HAVE A SEMICOLON KEEP GOING!!!"
 
-
+         puts "THE CURRENT ARRAY INDEX IS: " + @@arrayIndex.to_s
           #move the counter and keep GOING
           @@arrayIndex = @@arrayIndex + 1
           checkNextStatement
@@ -250,7 +255,6 @@ puts "vbar <x><y>,<y> "
 
 
       else #It must be 4 chars
-      
         @@arrayIndex = @@arrayIndex + 1
           checkNextStatement
 
@@ -269,7 +273,7 @@ def checkHbarQuery
   #the index has already been moved
 
   #checks the if the first number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[0,1]) == true # and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
   
   
   
@@ -279,7 +283,7 @@ def checkHbarQuery
   end#end of if statement to check for the first input
 
   
-  if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[1,1]) == true
 
       puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 
@@ -294,7 +298,7 @@ def checkHbarQuery
   end #end of if statement to check for the third input
 
      #checks for last y
-  if @@grammerToArray[@@arrayIndex].to_s[3,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[3,1]) == true
 
       
 
@@ -339,7 +343,7 @@ def checkFillQuery
 #the index has already been moved
 
   #checks the if the first number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_i[0,1]) == true # and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
   
   
   
@@ -349,7 +353,7 @@ def checkFillQuery
   end#end of if statement to check for the first input
 
   #check the if the second number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if (1..7).include?(@@grammerToArray[@@arrayIndex].to_s[1,1]) == true
 
       puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 

@@ -5,6 +5,11 @@ class BeginProgram
   @@arrayIndex = 0
   @@stringPos = 0
 
+
+  #use an array maybe 2d array
+
+  @@constructsentence =""
+
 #Grab the input from the user
 def getInput
 
@@ -47,24 +52,38 @@ def checkTo
   #Keep it simple and add all the bells and whisles After
   if   @@grammerToArray[0].to_s == "to"
 
-  #  puts "to <plot_cmd> end"
-    puts "to IS WORKING FINE" +" THIS IS THE FIRST STEP"
+   #check if the end is valid
+    if checkEnd
+
+     puts "to <plot_cmd> end" #add this to an array
+
+      #add the sentence to the string 
+    @@constructsentence = @@constructsentence + @@grammerToArray[0].to_s
+    
+    #count the position
+    @@stringPos = @@stringPos + @@grammerToArray[0].length()
+
 
     #Iterate the array index
     @@arrayIndex = @@arrayIndex + 1
 
-    
-
+    #call the next function
     checkNextStatement
+
+    end#end of checkEnd if statement
+
+    
 
   else
 
-    puts "ERROR at pos \'" + @@grammerToArray[0] +"\' not recognized!"
-    
+    puts "ERROR at pos: "+ @@stringPos.to_s +  " \'" +  @@grammerToArray[0].to_s + "\' not recognized!"
 
+    #call the function again??
+
+    return false
   end#end of if statement
   
-
+return true
 end#end of checkTo method
 
 def checkEnd
@@ -90,49 +109,36 @@ end#end if checkEnd method
 
 def checkNextStatement
 
-  #to keep track of the position, we add the number of characters from the array 0 pos
+  #it will iterate auto
 
-=begin
-
-  #NEED TO REVAMP
-  countChar = 0
-  countChar = countChar + @@grammerToArray[@@arrayIndex].size
-  puts "We are at: " + countChar.to_s
-
-=end
-
-  #first we need to know if the next array index contains a ;
-  #this will indicate the recursion process
-  
-
-=begin
-  #now we need to compare the next array part
-  #WE need to determine if the next commathe next array hbar, vbar, or fill?
-=end
-
-  #NOTE WE CAN CHECK TO SEE IF IT JUST ENDS
-
-  
-#FIRST WE NEED TO LOOP RECURSIVELY for CMD ONLY
-
-#WE already iterate the array counter after confirming to exist
-
-
-#index already moved
-#isTrue = false
-#while isTrue == false do #MAIN LOOP BODY
-
-  #supposely at 1 
-
-  #check to see what is the next command and flow from there 
-puts "THE CURRENT ARRAY INDEX IS" + @@arrayIndex.to_s
   if @@grammerToArray[@@arrayIndex].to_s == "vbar"
 
-    puts "you entered vbar!" 
-    #Now check for the input for the given command
+    #We need to determine if the next character contains a ;
 
+    if @@grammerToArray[@@arrayIndex+1].to_s.include? ";"
+
+      #it has it so continue
+        puts "to <cmd>; < plot_cmd > end"
+
+    #add the sentence to the string 
+    @@constructsentence = @@constructsentence + @@grammerToArray[@@arrayIndex].to_s
     @@arrayIndex = @@arrayIndex + 1
     checkVbarQuery
+
+    else
+
+      puts "to <cmd> end"
+      #add the sentence to the string 
+      @@constructsentence = @@constructsentence + @@grammerToArray[@@arrayIndex].to_s
+
+      @@arrayIndex = @@arrayIndex + 1
+      checkVbarQuery
+
+      #it doesnt have it
+
+    end#end of ; checker
+
+   
 
 
     elsif @@grammerToArray[@@arrayIndex].to_s == "hbar"
@@ -148,28 +154,72 @@ puts "THE CURRENT ARRAY INDEX IS" + @@arrayIndex.to_s
       @@arrayIndex = @@arrayIndex + 1
       checkFillQuery
 
+    else
 
-  end # end of if staement
+      puts "NONE OF THESE ARE VALID"
 
+    return false
+  end # end of if statement
 
-
-
-
-
+return true
 end#end of checkNextStatement method
 
 
 def checkVbarQuery
 
 #the index has already been moved
+#check to see if the size is correct
+
+
+#NEED TO RETHINK LOGIC
+
+#IT NEEDS TO CHECK IF THE CURRENT INDEX IS NOT 4 OR 5 BUT WHILE WE ARE NOT AT THE LAST INDEX 'END'
+puts @@grammerToArray[@@arrayIndex].size().to_s + "   BEFORE LOOP CHECK"
+
+temp = @@grammerToArray[@@arrayIndex].size().to_i
+
+puts temp.to_s + ": this is temp value"
+
+
+if temp.to_s != "5" or temp.to_s != "4" 
+    #check to see if we are at the last position
+
+    puts "This is the current array index" + @@arrayIndex.to_s
+
+    puts @@grammerToArray.size().to_s +  "This is the current size of the array entered"
+    puts @@grammerToArray[@@arrayIndex].size().to_s +"This is the current size of the index!"
+
+    puts "WE LEFT THE CHECK!!!"
+
+
+
+  if @@arrayIndex.to_i == @@grammerToArray.size().to_i - 1
+    puts "WE are at the last index"
+  else
+    
+    puts "ERROR UNVALID SIZE"
+   # return false
+
+  end#end check last
+
+  #the current array shouldnt be the last 
+
+  
+
+else
+puts "WE ENTER SOMETHING THAT IS 4-5 CHAR LONG"
 
   #checks the if the first number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
+  if @@grammerToArray[@@arrayIndex].to_s[0,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
   
   
   
       puts  @@grammerToArray[@@arrayIndex-1].to_s + " WAS THE LAST ENTRY"
 
+  else
+
+    puts "ERROR UNRECOGNIZED ENTRY AT FIRST POSITION"
+    return false
 
   end#end of if statement to check for the first input
 
@@ -178,6 +228,11 @@ def checkVbarQuery
 
       puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 
+  else
+
+    puts "ERROR UNRECOGNIZED ENTRY AT SECOND POSITION"
+    return false
+
   end#end of if statement to check for the second input
 
  #checks for ,
@@ -185,16 +240,25 @@ def checkVbarQuery
 
     puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] +     ",<y>"+ " end"
 
+  else
+
+    puts "ERROR UNRECOGNIZED ENTRY AT THIRD POSITION"
+    return false
 
   end #end of if statement to check for the third input
 
-     #checks for last y
+     #checks for FOURTH POS
   if @@grammerToArray[@@arrayIndex].to_s[3,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
 
       
 
     puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] +@@grammerToArray[@@arrayIndex].to_s[1,1] + ","    + @@grammerToArray[@@arrayIndex].to_s[3,1]      + " end"
 
+
+  else
+
+    puts "ERROR UNRECOGNIZED ENTRY AT FOURTH POSITION"
+    return false
 
   end #end of if statement to check for the fourth input
 
@@ -207,22 +271,28 @@ def checkVbarQuery
 
          puts "WE HAVE A SEMICOLON KEEP GOING!!!"
 
+         puts "THE CURRENT ARRAY INDEX IS: " + @@arrayIndex.to_s
           #move the counter and keep GOING
           @@arrayIndex = @@arrayIndex + 1
           checkNextStatement
-
+          return true
         else
 
           puts "Error at pos: " + "expected ;"
-
+          return false
 
         end#end internal loop to check for ;
 
+
+      else #It must be 4 chars
+        @@arrayIndex = @@arrayIndex + 1
+          checkNextStatement
+
       end #end of loop to check if it has 5 chars
 
+    end#end of size checker
     
-    
-
+return true
 
 end#end of checkVbarQuery
 

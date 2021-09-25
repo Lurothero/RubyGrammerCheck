@@ -154,9 +154,14 @@ def checkNextStatement
       @@arrayIndex = @@arrayIndex + 1
       checkFillQuery
 
+    elsif @@grammerToArray[@@arrayIndex].to_s == "end"
+
+      puts "This is the OFFICIAL END OF THE CODE"
+      return true
+
     else
 
-      puts "NONE OF THESE ARE VALID"
+      puts "INVALID COMMAND!!!!!"
 
     return false
   end # end of if statement
@@ -171,42 +176,7 @@ def checkVbarQuery
 #check to see if the size is correct
 
 
-#NEED TO RETHINK LOGIC
 
-#IT NEEDS TO CHECK IF THE CURRENT INDEX IS NOT 4 OR 5 BUT WHILE WE ARE NOT AT THE LAST INDEX 'END'
-puts @@grammerToArray[@@arrayIndex].size().to_s + "   BEFORE LOOP CHECK"
-
-temp = @@grammerToArray[@@arrayIndex].size().to_i
-
-puts temp.to_s + ": this is temp value"
-
-
-if temp.to_s != "5" or temp.to_s != "4" 
-    #check to see if we are at the last position
-
-    puts "This is the current array index" + @@arrayIndex.to_s
-
-    puts @@grammerToArray.size().to_s +  "This is the current size of the array entered"
-    puts @@grammerToArray[@@arrayIndex].size().to_s +"This is the current size of the index!"
-
-    puts "WE LEFT THE CHECK!!!"
-
-
-
-  if @@arrayIndex.to_i == @@grammerToArray.size().to_i - 1
-    puts "WE are at the last index"
-  else
-    
-    puts "ERROR UNVALID SIZE"
-   # return false
-
-  end#end check last
-
-  #the current array shouldnt be the last 
-
-  
-
-else
 puts "WE ENTER SOMETHING THAT IS 4-5 CHAR LONG"
 
   #checks the if the first number is valid
@@ -290,8 +260,7 @@ puts "WE ENTER SOMETHING THAT IS 4-5 CHAR LONG"
 
       end #end of loop to check if it has 5 chars
 
-    end#end of size checker
-    
+   
 return true
 
 end#end of checkVbarQuery

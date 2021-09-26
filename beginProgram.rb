@@ -8,6 +8,9 @@ class BeginProgram
 
   #use an array maybe 2d array
 
+  #Create an array to store the BNF
+  @@savedBNFGrammer = []
+
   @@constructsentence =""
 
 #Grab the input from the user
@@ -57,7 +60,13 @@ def checkTo
 
      puts "to <plot_cmd> end" #add this to an array
     
-     
+     #Lets build the string and then push it into an array
+     @@savedBNFGrammer << "<plot_cmd>"
+
+
+     dUMPArrayThingy
+
+     #Bruh just save the token parts of it and make the array iterate it somewhere
 
 
     #count the position
@@ -119,8 +128,10 @@ def checkNextStatement
 
       #
         puts "<cmd>; < plot_cmd >"
-        stringFormer = stringFormer + "<cmd>; <plot_cmd> "
+        @@savedBNFGrammer << "<cmd>; < plot_cmd >"
 
+dUMPArrayThingy
+       
     
     @@arrayIndex = @@arrayIndex + 1
     checkVbarQuery
@@ -128,6 +139,10 @@ def checkNextStatement
     else
 
       puts "<cmd> "
+      @@savedBNFGrammer << "<cmd>"
+
+
+      dUMPArrayThingy
       
       stringFormer = stringFormer + "<cmd> "
       @@arrayIndex = @@arrayIndex + 1
@@ -174,14 +189,18 @@ def checkVbarQuery
 #check to see if the size is correct
 
 puts "vbar <x><y>,<y> "
+@@savedBNFGrammer << "vbar <x><y>,<y>"
 
-
-
+dUMPArrayThingy
 
   #checks the if the first number is valid
   if ("1234567").include?(@@grammerToArray[@@arrayIndex].to_s[0,1])
   
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
+
+    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
+
+    dUMPArrayThingy
 
   else
 
@@ -194,6 +213,8 @@ puts "vbar <x><y>,<y> "
   if ("1234567").include?(@@grammerToArray[@@arrayIndex].to_s[1,1]) 
 
      puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
+
+     @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
 
   else
 
@@ -224,7 +245,9 @@ puts "vbar <x><y>,<y> "
       
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
     
+    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
 
+    dUMPArrayThingy
 
   else
 
@@ -234,6 +257,11 @@ puts "vbar <x><y>,<y> "
   end #end of if statement to check for the fourth input
 
      #after successfully checking all 4 values, we look to see of there is a ; THIS indicate we have a new command to process
+
+####################################
+# MIGHT NEED TO MOVE THIS SOMEWHERE
+#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVv
+##########################3
 
      #We need to check if the current index length is correct; with this we can safely compare the ;
   if @@grammerToArray[@@arrayIndex].size == 5 
@@ -345,7 +373,7 @@ def checkFillQuery
 #the index has already been moved
 
   #checks the if the first number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[0,1])# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
+  if ("1234567").include?(@@grammerToArray[@@arrayIndex].to_s[0,1])# and @@grammerToArray[@@arrayIndex].to_s.include? ";" #CHECKS if it has a ;
   
   
   
@@ -355,7 +383,7 @@ def checkFillQuery
   end#end of if statement to check for the first input
 
   #check the if the second number is valid
-  if @@grammerToArray[@@arrayIndex].to_s[1,1] == "1" or "2" or "3" or "4" or "5" or "6" or "7"
+  if ("1234567").include?(@@grammerToArray[@@arrayIndex].to_s[1,1])
 
       puts "to " + @@grammerToArray[@@arrayIndex-1].to_s +  " "+@@grammerToArray[@@arrayIndex].to_s[0,1] + " <y>,<y>"+ " end"
 
@@ -391,7 +419,15 @@ def checkFillQuery
 end#END OF checkFillQuery
 
 
+#TEMP METHOD
 
+
+def dUMPArrayThingy
+
+  puts "DUMPING VALUES: " + @@savedBNFGrammer.to_s
+
+
+end
 
 
 

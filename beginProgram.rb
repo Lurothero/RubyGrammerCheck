@@ -2,6 +2,7 @@ class BeginProgram
   @@inputGrammer = 0
   @@grammerToArray = 0
   @@arrayIndex = 0
+
   @@stringPos = 0
 
   # use an array maybe 2d array
@@ -15,8 +16,6 @@ class BeginProgram
   def getInput
     puts 'ENTER GRAMMER RULE'
     @@inputGrammer = gets
-     puts @@inputGrammer + ": VALUED ENTERED"
-     puts @@inputGrammer.count("end").to_s + "The number of counts"
 
     toArray
   end # end of getInput method
@@ -24,9 +23,10 @@ class BeginProgram
   # save the string input from the user
   def toArray
     @@grammerToArray = @@inputGrammer.split
-    # puts @@grammerToArray
-
     grammerChecker
+
+puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
+
   end # end of toArray method
 
   def grammerChecker
@@ -45,12 +45,8 @@ class BeginProgram
         # Lets build the string and then push it into an array
         @@savedBNFGrammer << @@prevString + '<plot_cmd>'
 
-        dUMPArrayThingy
-
-        # Bruh just save the token parts of it and make the array iterate it somewhere
-
         # count the position
-        @@stringPos += @@grammerToArray[0].length #We might not need this actually
+        @@stringPos += @@grammerToArray[0].length + 1
 
         # Iterate the array index
         @@arrayIndex += 1
@@ -64,13 +60,20 @@ class BeginProgram
 
       if @@grammerToArray[0].to_s != 'to'
         # The first entry is not valid so throw an error at the user
-        puts "Error at pos: " +(@@inputGrammer.index(@@grammerToArray[0].to_s)+1).to_s +  "; '"  + @@grammerToArray[0].to_s + "\' not recognized!"
+
+       
+
+
+        puts "TO ERROR CHECK THIS OUT"
+
+
+        puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[0].to_s) + 1).to_s + "; '" + @@grammerToArray[0].to_s + "\' not recognized!"
         return false
       end
 
-      if @@grammerToArray[@@arrayIndex + 1].to_s == 'end'
+      if (@@grammerToArray[@@arrayIndex + 1].to_s == 'end') && (@@grammerToArray[@@arrayIndex + 1].to_s == 'to')
         # There is nothing to continue with so throw an error to the user
-        puts "Error at pos: " +(@@inputGrammer.index(@@grammerToArray[1].to_s)+1).to_s +  "; '"  + @@grammerToArray[1].to_s + "\' UNEXPECTED end found; EXPECTED <plot_cmd>"
+        puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[1].to_s) + 1).to_s + "; '" + @@grammerToArray[1].to_s + "\' UNEXPECTED end found; EXPECTED <plot_cmd>"
 
         return false
       end
@@ -85,24 +88,19 @@ class BeginProgram
 
   def checkEnd
     # check to see if the last index is an end
-    if @@grammerToArray[@@grammerToArray.length - 1].to_s == 'end' and @@inputGrammer.count("end").to_i == 3 #why 3? because ruby counts the number of instances as the length so it there is 2 matches then it would count the length together, why is this the case i do not know
+    if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1
 
-      puts "YOU CAN SAFELY PROCEED"
+      # (@@inputGrammer.count('end').to_i == 3) # why 3? because ruby counts the number of instances as the length so it there is 2 matches then it would count the length together, why is this the case i do not know
+
       true
-    elsif @@inputGrammer.count("end") != 3
+    elsif @@grammerToArray.grep('end').size.to_i > 1
 
-      puts "Error! Cannot have multiple ends! "
-
+      puts 'Error! Cannot have multiple ends! '
 
     else
 
 
-
-      puts 'Unexpected end of file; EXPECTED end'
-        #the length of the entire array - 1
-
-      puts "Error at pos: " +(@@inputGrammer.index(@@grammerToArray[@@grammerToArray.length-1].to_s)+1).to_s +  "; '"  + @@grammerToArray[@@grammerToArray.length-1].to_s + "\' command is not closed properly! EXPECTED END"
-
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@grammerToArray.length - 1].to_s) + 1).to_s + "; '" + @@grammerToArray[@@grammerToArray.length - 1].to_s + "\' command is not closed properly! EXPECTED END"
 
       false
     end # end of if statement
@@ -125,24 +123,22 @@ class BeginProgram
       if @@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
 
         # it has it so continue
-
         puts '<cmd>; < plot_cmd >'
         @@savedBNFGrammer << @@prevString + '<cmd>; < plot_cmd >'
-
-        dUMPArrayThingy
-
         @@arrayIndex += 1
         checkVbarQuery
       else
         puts '<cmd> '
         @@savedBNFGrammer << @@prevString + '<cmd>'
-
-        dUMPArrayThingy
-
+        
         stringFormer += '<cmd> '
         @@arrayIndex += 1
         checkVbarQuery
       end # end of ; checker
+
+
+
+
     elsif @@grammerToArray[@@arrayIndex].to_s == 'hbar'
       puts 'you entered hbar'
       @@arrayIndex += 1
@@ -155,7 +151,11 @@ class BeginProgram
       puts 'This is the OFFICIAL END OF THE CODE'
       return true
     else
-      puts 'Error! Unknown command: ' + @@grammerToArray[@@arrayIndex].to_s + ' At pos: ' + 'SOME POSITION'
+
+
+      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Do you mean? vbar | hbar | fill  "
+
+      
 
       return false
     end # end of if statement
@@ -193,9 +193,11 @@ class BeginProgram
 
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<y>' + stringADD
 
-      dUMPArrayThingy
+     
     else
-      puts 'ERROR UNRECOGNIZED ENTRY AT FIRST POSITION'
+
+puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
+
       return false
     end # end of if statement to check for the first input
 
@@ -204,7 +206,8 @@ class BeginProgram
 
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>' + stringADD
     else
-      puts 'ERROR UNRECOGNIZED ENTRY AT SECOND POSITION'
+      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
+
       return false
     end # end of if statement to check for the second input
 
@@ -216,7 +219,10 @@ class BeginProgram
       # puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + "<y>"
 
     else
-      puts "Error! unknown symbol at pos: " +  @@grammerToArray[@@arrayIndex].to_s[2, 1]  +" expected , " 
+      puts 'Error! unknown symbol at pos: ' + @@grammerToArray[@@arrayIndex].to_s[2, 1] + ' expected , '
+
+       puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
+
       return false
     end # end of if statement to check for the third input
 
@@ -228,8 +234,9 @@ class BeginProgram
 
       dUMPArrayThingy
     else
-      puts 'ERROR UNRECOGNIZED ENTRY AT FOURTH POSITION'
+      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 4).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
       return false
+
     end # end of if statement to check for the fourth input
 
     # after successfully checking all 4 values, we look to see of there is a ; THIS indicate we have a new command to process
@@ -240,9 +247,8 @@ class BeginProgram
     # #########################3
 
     # We need to check if the current index length is correct; with this we can safely compare the ;
-    if @@grammerToArray[@@arrayIndex].size == 5  and @@grammerToArray[@@arrayIndex+1].to_s != "end"
+    if (@@grammerToArray[@@arrayIndex].size == 5) && (@@grammerToArray[@@arrayIndex + 1].to_s != 'end')
 
-    
       if @@grammerToArray[@@arrayIndex].to_s[4, 1] == ';'
 
         #
@@ -251,7 +257,6 @@ class BeginProgram
 
         # we need to include the prev string as well
         @@prevString = @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',' + @@grammerToArray[@@arrayIndex].to_s[3, 1] + ';' + ' '
-
 
         # move the counter and keep GOING
         @@arrayIndex += 1
@@ -264,19 +269,18 @@ class BeginProgram
         puts 'Error at pos: ' + 'expected ;'
         return false
       end # end internal loop to check for ;
-    elsif  @@grammerToArray[@@arrayIndex].size == 4 and @@grammerToArray[@@arrayIndex+1].to_s == "end"
-      
+    elsif (@@grammerToArray[@@arrayIndex].size == 4) && (@@grammerToArray[@@arrayIndex + 1].to_s == 'end')
+
       # It must be 4 chars and it closes with and end
 
-      #cant safely assume it is only 4 char long
-    
+      # cant safely assume it is only 4 char long
+
       @@arrayIndex += 1
       checkNextStatement
 
-    else#if its not 4 nor 5 then it must be an error
-      puts "Error at pos: " +"SOME POS " + "Invalid Format: " + @@grammerToArray[@@arrayIndex].to_s
-
-
+    else # if its not 4 nor 5 then it must be an error
+ 
+       puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected closure ';' but command continued"
 
     end # end of loop to check if it has 5 chars
 
@@ -297,6 +301,7 @@ class BeginProgram
 
     # checks for ,
     if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ','
+
       puts 'to ' + @@grammerToArray[@@arrayIndex - 1].to_s + ' ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>' + ' end'
     end # end of if statement to check for the third input
 

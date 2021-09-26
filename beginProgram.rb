@@ -11,7 +11,8 @@ class BeginProgram
   #Create an array to store the BNF
   @@savedBNFGrammer = []
 
-  @@constructsentence =""
+  @@prevString = ""
+
 
 #Grab the input from the user
 def getInput
@@ -61,7 +62,7 @@ def checkTo
      puts "to <plot_cmd> end" #add this to an array
     
      #Lets build the string and then push it into an array
-     @@savedBNFGrammer << "<plot_cmd>"
+     @@savedBNFGrammer << @@prevString + "<plot_cmd>"
 
 
      dUMPArrayThingy
@@ -128,7 +129,7 @@ def checkNextStatement
 
       #
         puts "<cmd>; < plot_cmd >"
-        @@savedBNFGrammer << "<cmd>; < plot_cmd >"
+        @@savedBNFGrammer << @@prevString + "<cmd>; < plot_cmd >"
 
 dUMPArrayThingy
        
@@ -139,7 +140,7 @@ dUMPArrayThingy
     else
 
       puts "<cmd> "
-      @@savedBNFGrammer << "<cmd>"
+      @@savedBNFGrammer << @@prevString + "<cmd>"
 
 
       dUMPArrayThingy
@@ -183,6 +184,9 @@ return true
 end#end of checkNextStatement method
 
 
+
+
+
 def checkVbarQuery
 
 #the index has already been moved
@@ -216,7 +220,7 @@ puts "vbar <x><y>,<y> "
 
 #potential if statement 
 
-@@savedBNFGrammer << "vbar <x><y>,<y>" + stringADD
+@@savedBNFGrammer << @@prevString + "vbar <x><y>,<y>" + stringADD
 
 dUMPArrayThingy
 
@@ -225,7 +229,7 @@ dUMPArrayThingy
   
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
 
-    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>" + stringADD
+    @@savedBNFGrammer << @@prevString + "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>" + stringADD
 
     dUMPArrayThingy
 
@@ -241,7 +245,7 @@ dUMPArrayThingy
 
      puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
 
-     @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>" + stringADD
+     @@savedBNFGrammer << @@prevString +  "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>" + stringADD
 
   else
 
@@ -272,7 +276,7 @@ dUMPArrayThingy
       
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
     
-    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + stringADD
+    @@savedBNFGrammer << @@prevString + "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + stringADD
 
     dUMPArrayThingy
 
@@ -295,11 +299,24 @@ dUMPArrayThingy
 
     if @@grammerToArray[@@arrayIndex].to_s[4,1] == ";"
 
+=begin
+
       puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + ";"
 
+=end
+
+  #we need to include the prev string as well
+          @@prevString = @@prevString + "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + ";"+" "
+
+          puts "WE SHOULD BE SEEING THE PREV STRING SAVE??"
 
           #move the counter and keep GOING
           @@arrayIndex = @@arrayIndex + 1
+
+        
+
+          puts @@prevString
+
           checkNextStatement
           return true
         else

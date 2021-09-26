@@ -188,8 +188,35 @@ def checkVbarQuery
 #the index has already been moved
 #check to see if the size is correct
 
-puts "vbar <x><y>,<y> "
-@@savedBNFGrammer << "vbar <x><y>,<y>"
+stringADD= ""
+
+
+
+
+if @@grammerToArray[@@arrayIndex].size == 5 
+
+    if @@grammerToArray[@@arrayIndex].to_s[4,1] == ";"
+
+      #we can continue
+      stringADD = ";<plot_cmd>"
+
+
+    end
+
+  else
+
+    stringADD= ""
+
+
+end
+
+
+
+puts "vbar <x><y>,<y> " 
+
+#potential if statement 
+
+@@savedBNFGrammer << "vbar <x><y>,<y>" + stringADD
 
 dUMPArrayThingy
 
@@ -198,7 +225,7 @@ dUMPArrayThingy
   
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
 
-    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>"
+    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +   " <y>,<y>" + stringADD
 
     dUMPArrayThingy
 
@@ -214,7 +241,7 @@ dUMPArrayThingy
 
      puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
 
-     @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>"
+     @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ",<y>" + stringADD
 
   else
 
@@ -245,7 +272,7 @@ dUMPArrayThingy
       
     puts "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
     
-    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1]
+    @@savedBNFGrammer << "vbar " +  @@grammerToArray[@@arrayIndex].to_s[0,1] +  @@grammerToArray[@@arrayIndex].to_s[1,1]  + ","  + @@grammerToArray[@@arrayIndex].to_s[3,1] + stringADD
 
     dUMPArrayThingy
 

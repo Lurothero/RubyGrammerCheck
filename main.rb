@@ -4,8 +4,6 @@ require_relative "token"
 
 require_relative "beginProgram"
 
-
-
 =begin
 
 <chart>→ to <plot_cmd> end
@@ -54,14 +52,6 @@ PSEUDOCODE I GUESS
 
 
 =end
-
-
-
-
-
-
-
-
 
 #Start the parsing process
 

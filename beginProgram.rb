@@ -71,7 +71,7 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
         return false
       end
 
-      if (@@grammerToArray[@@arrayIndex + 1].to_s == 'end') && (@@grammerToArray[@@arrayIndex + 1].to_s == 'to')
+      if (@@grammerToArray[@@arrayIndex + 1].to_s == 'end') && (@@grammerToArray[@@arrayIndex].to_s == 'to')
         # There is nothing to continue with so throw an error to the user
         puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[1].to_s) + 1).to_s + "; '" + @@grammerToArray[1].to_s + "\' UNEXPECTED end found; EXPECTED <plot_cmd>"
 
@@ -152,7 +152,7 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
       return true
     else
 
-
+#if you have the same var then bruh 
       puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Do you mean? vbar | hbar | fill  "
 
       

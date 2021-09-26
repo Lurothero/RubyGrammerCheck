@@ -15,7 +15,8 @@ class BeginProgram
   def getInput
     puts 'ENTER GRAMMER RULE'
     @@inputGrammer = gets
-    # puts @@inputGrammer
+     puts @@inputGrammer + ": VALUED ENTERED"
+     puts @@inputGrammer.count("end").to_s + "The number of counts"
 
     toArray
   end # end of getInput method
@@ -84,10 +85,19 @@ class BeginProgram
 
   def checkEnd
     # check to see if the last index is an end
-    if @@grammerToArray[@@grammerToArray.length - 1].to_s == 'end'
+    if @@grammerToArray[@@grammerToArray.length - 1].to_s == 'end' and @@inputGrammer.count("end").to_i == 3 #why 3? because ruby counts the number of instances as the length so it there is 2 matches then it would count the length together, why is this the case i do not know
 
+      puts "YOU CAN SAFELY PROCEED"
       true
+    elsif @@inputGrammer.count("end") != 3
+
+      puts "Error! Cannot have multiple ends! "
+
+
     else
+
+
+
       puts 'Unexpected end of file; EXPECTED end'
         #the length of the entire array - 1
 

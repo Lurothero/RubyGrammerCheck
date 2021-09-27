@@ -424,10 +424,9 @@ class BeginProgram
     true
   end # end of checkHbarQuery method
 
-  def checkFillQuery; 
-
-  puts @@grammerToArray[@@arrayIndex].to_s
-# the index has already been moved
+  def checkFillQuery
+    puts @@grammerToArray[@@arrayIndex].to_s
+    # the index has already been moved
     # check to see if the size is correct
 
     # Used to add the end of the cmd
@@ -436,40 +435,29 @@ class BeginProgram
     if @@grammerToArray[@@arrayIndex].size == 3
 
       # checks to see if ; is in the correct position
-      if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ';' and @@grammerToArray[@@arrayIndex+1].to_s != "end"
+      if (@@grammerToArray[@@arrayIndex].to_s[2, 1] == ';') && (@@grammerToArray[@@arrayIndex + 1].to_s != 'end')
 
         # we can continue
         stringADD = '; <plot_cmd>'
 
+      else # it is NOT a ;
+        if @@grammerToArray[@@arrayIndex].to_s[2, 1] != ';'
 
-      else#it is NOT a ;
-        if  @@grammerToArray[@@arrayIndex].to_s[2, 1] != ';'
-
-            puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; " + @@grammerToArray[@@arrayIndex].to_s + " Expected ;" 
-
+          puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + '; ' + @@grammerToArray[@@arrayIndex].to_s + ' Expected ;'
 
         else
 
-            puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; " + @@grammerToArray[@@arrayIndex].to_s + " Unexpected end found; Expected <cmd>" 
-
+          puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + '; ' + @@grammerToArray[@@arrayIndex].to_s + ' Unexpected end found; Expected <cmd>'
 
         end
 
-      
-
-
-
-
-        
         return false
       end
 
     else
-      puts "ITS DEFINATELY DOENST HAVE IT"
+      puts 'ITS DEFINATELY DOENST HAVE IT'
       stringADD = ''
     end
-
-
 
     # push to the array
     @@savedBNFGrammer << @@prevString + 'fill <x><y>' + stringADD
@@ -487,22 +475,15 @@ class BeginProgram
       return false
     end # end of if statement to check for the first input
 
-
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[1, 1])
 
-      @@savedBNFGrammer << @@prevString + 'fill ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1]  + stringADD
+      @@savedBNFGrammer << @@prevString + 'fill ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + stringADD
     else
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
     end # end of if statement to check for the second input
 
-
-
-
-
-
-    
     # after successfully checking all 2 values, we look to see of there is a ; THIS indicate we have a new command to process
 
     # We need to check if the current index length is correct; with this we can safely compare the ;
@@ -511,7 +492,7 @@ class BeginProgram
       if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ';'
 
         # we need to include the prev string as well
-        @@prevString = @@prevString + "fill" +  @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ';' + ' '
+        @@prevString = @@prevString + 'fill ' +  @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ';' + ' '
 
         # move the counter and keep GOING
         @@arrayIndex += 1
@@ -538,20 +519,15 @@ class BeginProgram
 
     else # if its not 2 nor 3 then it must be an error
 
-      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "Expected <cmd>"
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + 'Expected <cmd>'
       return false
 
-# invalid format; Expected <x>,<y> Where xy = {1,2,3,4,5,6,7}
+      # invalid format; Expected <x>,<y> Where xy = {1,2,3,4,5,6,7}
 
     end # end of loop to check if it has 5 chars
 
     true
-
-
-
-
-
-end # END OF checkFillQuery
+  end # END OF checkFillQuery
 
   # TEMP METHOD
 

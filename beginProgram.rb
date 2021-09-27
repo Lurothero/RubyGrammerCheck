@@ -29,12 +29,28 @@ class BeginProgram
 
   # save the string input from the user
   def toArray
-
-    #like here
-
     @@grammerToArray = @@inputGrammer.split
 
-    grammerChecker
+    check = false
+    @@grammerToArray.each_cons(2) do |pair|
+      if ('1234567890').include?(pair.at(0)) == true || ('1234567890').include?(pair.at(1)) == true
+      else
+        if pair.uniq.length == pair.length
+        else
+          check = true
+        end
+      end
+    end
+
+    # put a simple if statement to allow the program to continue
+
+    if !check
+      grammerChecker
+
+    else
+      puts 'Error! Duplicate entries next to each other is not allowed!'
+      false
+    end
   end # end of toArray method
 
   # doesnt really do anything other than calling 1 function
@@ -495,7 +511,7 @@ class BeginProgram
       if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ';'
 
         # we need to include the prev string as well
-        @@prevString = @@prevString + 'fill ' +  @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ';' + ' '
+        @@prevString = @@prevString + 'fill ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ';' + ' '
 
         # move the counter and keep GOING
         @@arrayIndex += 1

@@ -1,21 +1,28 @@
+require_relative "parseTree"
+
 class BeginProgram
-  @@inputGrammer = 0
+
+  #Create Some useful variables
+  @@inputGrammer = 0 
   @@grammerToArray = 0
   @@arrayIndex = 0
 
-  @@stringPos = 0
 
-  # use an array maybe 2d array
 
   # Create an array to store the BNF
   @@savedBNFGrammer = []
-
   @@prevString = ''
 
   # Grab the input from the user
-  def getInput
-    puts 'ENTER GRAMMER RULE'
-    @@inputGrammer = gets
+  def initialize(getCommand)
+    @@inputGrammer = 0
+    @@grammerToArray = 0
+    @@arrayIndex = 0
+
+    @@savedBNFGrammer = []
+    @@prevString = ''
+
+    @@inputGrammer = getCommand
 
     toArray
   end # end of getInput method
@@ -49,8 +56,6 @@ class BeginProgram
         # Lets build the string and then push it into an array
         @@savedBNFGrammer << @@prevString + '<plot_cmd>'
 
-        # count the position
-        @@stringPos += @@grammerToArray[0].length + 1
 
         # Iterate the array index
         @@arrayIndex += 1
@@ -58,7 +63,7 @@ class BeginProgram
         # call the next function
         # IIRC ruby automatically return the last state of the variable
         checkNextStatement
-        
+
         #      return true
       end # end of checkEnd if statement
     else
@@ -146,6 +151,11 @@ class BeginProgram
       printBNF
 
 
+      
+      #drawing the parse tree
+      tree = ParseTree.new(@@inputGrammer) 
+      tree.draw
+      #Now then how do we pass in ur code here
 
       return true
     else
@@ -248,8 +258,6 @@ class BeginProgram
         # move the counter and keep GOING
         @@arrayIndex += 1
 
-        
-
         checkNextStatement
         return true
       else
@@ -347,15 +355,12 @@ class BeginProgram
   def dUMPArrayThingy
     puts 'DUMPING VALUES: ' + @@savedBNFGrammer.to_s
 
-    #printBNF
+    # printBNF
   end
-
 
   def printBNF
-        @@savedBNFGrammer.each{ |n| puts   "<chart>→ to " + n + " end" }
-
+    @@savedBNFGrammer.each { |n| puts '<chart>→ to ' + n + ' end' }
   end
-
 end # end of class
 
 def didWeMakeIt(isTrue)
@@ -368,4 +373,3 @@ def didWeMakeIt(isTrue)
 
   end
 end
-

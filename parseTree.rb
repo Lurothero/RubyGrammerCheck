@@ -121,6 +121,7 @@ class ParseTree
     @@pre.reset
     @@pre.addLevel
     puts @@pre.getPrefix + arg
+    @@pre.reset
   end
 
   def printChart(arg)
@@ -148,7 +149,10 @@ class ParseTree
       masterPrint(@@printing_list)
     else #this will be if they're only one "<cmd>"
       #printing "<plot_cmd>"
-      removePBranch
+      #if @@pre.getLayerCount != 1
+      #  removePBranch
+      #end
+
       puts @@pre.getPrefix + arg
       removeFirst  #removing "<plot_cmd> from the printing_list"
 

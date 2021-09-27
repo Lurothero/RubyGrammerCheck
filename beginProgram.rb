@@ -23,15 +23,22 @@ class BeginProgram
   # save the string input from the user
   def toArray
     @@grammerToArray = @@inputGrammer.split
+
     grammerChecker
-
-puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
-
   end # end of toArray method
 
   def grammerChecker
+
+    isCorrect = checkTo
+
+    didWeMakeIt(isCorrect)
+
+    #we want to see if out grammer is correct
+
+
+
     # CALL THE OTHER FUNCTION
-    checkTo # should be rename to actual start or something
+   # checkTo # should be rename to actual start or something
   end # end of grammerChecker method
 
   def checkTo
@@ -52,7 +59,9 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
         @@arrayIndex += 1
 
         # call the next function
-        checkNextStatement
+        # IIRC ruby automatically return the last state of the variable
+        return checkNextStatement
+  #      return true
       end # end of checkEnd if statement
     else
 
@@ -60,12 +69,6 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
 
       if @@grammerToArray[0].to_s != 'to'
         # The first entry is not valid so throw an error at the user
-
-       
-
-
-        puts "TO ERROR CHECK THIS OUT"
-
 
         puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[0].to_s) + 1).to_s + "; '" + @@grammerToArray[0].to_s + "\' not recognized!"
         return false
@@ -82,23 +85,20 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
       return false
 
     end # end of if statement
-
-    true
   end # end of checkTo method
 
   def checkEnd
     # check to see if the last index is an end
     if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1
 
-      # (@@inputGrammer.count('end').to_i == 3) # why 3? because ruby counts the number of instances as the length so it there is 2 matches then it would count the length together, why is this the case i do not know
+      # do nothing
 
       true
     elsif @@grammerToArray.grep('end').size.to_i > 1
 
       puts 'Error! Cannot have multiple ends! '
-
+      false
     else
-
 
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@grammerToArray.length - 1].to_s) + 1).to_s + "; '" + @@grammerToArray[@@grammerToArray.length - 1].to_s + "\' command is not closed properly! EXPECTED END"
 
@@ -123,21 +123,16 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
       if @@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
 
         # it has it so continue
-        puts '<cmd>; < plot_cmd >'
         @@savedBNFGrammer << @@prevString + '<cmd>; < plot_cmd >'
         @@arrayIndex += 1
         checkVbarQuery
       else
-        puts '<cmd> '
         @@savedBNFGrammer << @@prevString + '<cmd>'
-        
+
         stringFormer += '<cmd> '
         @@arrayIndex += 1
         checkVbarQuery
       end # end of ; checker
-
-
-
 
     elsif @@grammerToArray[@@arrayIndex].to_s == 'hbar'
       puts 'you entered hbar'
@@ -149,13 +144,13 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
       checkFillQuery
     elsif @@grammerToArray[@@arrayIndex].to_s == 'end'
       puts 'This is the OFFICIAL END OF THE CODE'
+
+      dUMPArrayThingy
       return true
     else
 
-#if you have the same var then bruh 
-      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Do you mean? vbar | hbar | fill  "
-
-      
+      # if you have the same var then bruh
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Do you mean? vbar | hbar | fill  "
 
       return false
     end # end of if statement
@@ -179,34 +174,27 @@ puts @@grammerToArray.grep('end').size().to_s + " GREP CALLED"
       stringADD = ''
     end
 
-    puts 'vbar <x><y>,<y> '
-
     # potential if statement
 
     @@savedBNFGrammer << @@prevString + 'vbar <x><y>,<y>' + stringADD
 
-    dUMPArrayThingy
-
     # checks the if the first number is valid
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[0, 1])
-      puts 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<y>'
 
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<y>' + stringADD
 
-     
     else
 
-puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
     end # end of if statement to check for the first input
 
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[1, 1])
-      puts 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>'
 
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>' + stringADD
     else
-      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
     end # end of if statement to check for the second input
@@ -221,20 +209,18 @@ puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_
     else
       puts 'Error! unknown symbol at pos: ' + @@grammerToArray[@@arrayIndex].to_s[2, 1] + ' expected , '
 
-       puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
 
       return false
     end # end of if statement to check for the third input
 
     # checks for FOURTH POS
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[3, 1])
-      puts 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',' + @@grammerToArray[@@arrayIndex].to_s[3, 1]
 
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',' + @@grammerToArray[@@arrayIndex].to_s[3, 1] + stringADD
 
-      dUMPArrayThingy
     else
-      puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 4).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 4).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
       return false
 
     end # end of if statement to check for the fourth input
@@ -279,8 +265,8 @@ puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_
       checkNextStatement
 
     else # if its not 4 nor 5 then it must be an error
- 
-       puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s  + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected closure ';' but command continued"
+
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected closure ';' but command continued"
 
     end # end of loop to check if it has 5 chars
 
@@ -361,3 +347,16 @@ puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_
     puts 'DUMPING VALUES: ' + @@savedBNFGrammer.to_s
   end
 end # end of class
+
+
+def didWeMakeIt(isTrue)
+  if isTrue
+
+    puts "This is true"
+
+  else 
+    puts "this is false"
+
+  end
+
+end

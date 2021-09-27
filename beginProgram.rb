@@ -29,6 +29,9 @@ class BeginProgram
 
   # save the string input from the user
   def toArray
+
+    #like here
+
     @@grammerToArray = @@inputGrammer.split
 
     grammerChecker

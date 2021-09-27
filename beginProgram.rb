@@ -28,17 +28,14 @@ class BeginProgram
   end # end of toArray method
 
   def grammerChecker
-
     isCorrect = checkTo
 
     didWeMakeIt(isCorrect)
 
-    #we want to see if out grammer is correct
-
-
+    # we want to see if out grammer is correct
 
     # CALL THE OTHER FUNCTION
-   # checkTo # should be rename to actual start or something
+    # checkTo # should be rename to actual start or something
   end # end of grammerChecker method
 
   def checkTo
@@ -60,8 +57,9 @@ class BeginProgram
 
         # call the next function
         # IIRC ruby automatically return the last state of the variable
-        return checkNextStatement
-  #      return true
+        checkNextStatement
+        
+        #      return true
       end # end of checkEnd if statement
     else
 
@@ -82,7 +80,7 @@ class BeginProgram
       end
 
       # call the function again??
-      return false
+      false
 
     end # end of if statement
   end # end of checkTo method
@@ -123,15 +121,15 @@ class BeginProgram
       if @@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
 
         # it has it so continue
-        @@savedBNFGrammer << @@prevString + '<cmd>; < plot_cmd >'
+        @@savedBNFGrammer << @@prevString + '<cmd>; <plot_cmd>'
         @@arrayIndex += 1
-        checkVbarQuery
+        return checkVbarQuery
       else
         @@savedBNFGrammer << @@prevString + '<cmd>'
 
         stringFormer += '<cmd> '
         @@arrayIndex += 1
-        checkVbarQuery
+        return checkVbarQuery
       end # end of ; checker
 
     elsif @@grammerToArray[@@arrayIndex].to_s == 'hbar'
@@ -145,7 +143,10 @@ class BeginProgram
     elsif @@grammerToArray[@@arrayIndex].to_s == 'end'
       puts 'This is the OFFICIAL END OF THE CODE'
 
-      dUMPArrayThingy
+      printBNF
+
+
+
       return true
     else
 
@@ -168,7 +169,7 @@ class BeginProgram
       if @@grammerToArray[@@arrayIndex].to_s[4, 1] == ';'
 
         # we can continue
-        stringADD = ';<plot_cmd>'
+        stringADD = '; <plot_cmd>'
       end
     else
       stringADD = ''
@@ -247,7 +248,7 @@ class BeginProgram
         # move the counter and keep GOING
         @@arrayIndex += 1
 
-        puts @@prevString
+        
 
         checkNextStatement
         return true
@@ -345,18 +346,26 @@ class BeginProgram
 
   def dUMPArrayThingy
     puts 'DUMPING VALUES: ' + @@savedBNFGrammer.to_s
-  end
-end # end of class
 
+    #printBNF
+  end
+
+
+  def printBNF
+        @@savedBNFGrammer.each{ |n| puts   "<chart>→ to " + n + " end" }
+
+  end
+
+end # end of class
 
 def didWeMakeIt(isTrue)
   if isTrue
 
-    puts "This is true"
+    puts 'This is true'
 
-  else 
-    puts "this is false"
+  else
+    puts 'this is false'
 
   end
-
 end
+

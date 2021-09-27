@@ -1,34 +1,29 @@
-require_relative "parseTree"
+require_relative 'parseTree'
 
 class BeginProgram
-
-  #Create Some useful variables
-  @@inputGrammer = 0 
+  # Create Some useful variables
+  @@inputGrammer = 0
   @@grammerToArray = 0
   @@arrayIndex = 0
-
-
 
   # Create an array to store the BNF
   @@savedBNFGrammer = []
 
-  #Used to concat the previous results of the BNF grammer
+  # Used to concat the previous results of the BNF grammer
   @@prevString = ''
 
   # Grab the input from the user
   def initialize(getCommand)
-
-    #Reset all the variables
+    # Reset all the variables
     @@inputGrammer = 0
     @@grammerToArray = 0
     @@arrayIndex = 0
     @@savedBNFGrammer = []
     @@prevString = ''
 
-    #Get the user's input
+    # Get the user's input
     @@inputGrammer = getCommand.chomp
 
-    
     toArray
   end # end of getInput method
 
@@ -39,27 +34,23 @@ class BeginProgram
     grammerChecker
   end # end of toArray method
 
-  #doesnt really do anything other than calling 1 function
+  # doesnt really do anything other than calling 1 function
   def grammerChecker
-
-    #just a bool for debugging purposes
-    isCorrect = checkTo 
+    # just a bool for debugging purposes
+    isCorrect = checkTo
 
     didWeMakeIt(isCorrect)
-
   end # end of grammerChecker method
 
   def checkTo
-    #This validate that the first entry is correct and also peeps to see if the next entry isnt immediately terminated
+    # This validate that the first entry is correct and also peeps to see if the next entry isnt immediately terminated
     if (@@grammerToArray[0].to_s == 'to') && (@@grammerToArray[@@arrayIndex + 1].to_s != 'end')
-      
 
       # check if the end is valid
       if checkEnd
 
         # Lets build the string and then push it into an array
         @@savedBNFGrammer << @@prevString + '<plot_cmd>'
-
 
         # Iterate the array index
         @@arrayIndex += 1
@@ -102,13 +93,13 @@ class BeginProgram
 
       true
 
-    #Detected Multiple ends
+    # Detected Multiple ends
     elsif @@grammerToArray.grep('end').size.to_i > 1
 
       puts 'Error! Multiple "end" found; Only 1 is allowed! '
       false
 
-    #Detects if its not properly closed  
+    # Detects if its not properly closed
     else
 
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@grammerToArray.length - 1].to_s) + 1).to_s + "; '" + @@grammerToArray[@@grammerToArray.length - 1].to_s + "\' command is not closed properly! EXPECTED END"
@@ -117,10 +108,8 @@ class BeginProgram
     end # end of if statement
   end # end if checkEnd method
 
-
-#This deals with the middle <plot_cmd>
+  # This deals with the middle <plot_cmd>
   def checkNextStatement
-   
     # it will iterate auto
     if @@grammerToArray[@@arrayIndex].to_s == 'vbar'
       # start to contruct the middle sentence
@@ -133,7 +122,7 @@ class BeginProgram
         @@arrayIndex += 1
         return checkVbarQuery
       else
-        #It doenst have it; therefore we must be at the last command
+        # It doenst have it; therefore we must be at the last command
         @@savedBNFGrammer << @@prevString + '<cmd>'
 
         @@arrayIndex += 1
@@ -141,7 +130,7 @@ class BeginProgram
       end # end of ; checker
 
     elsif @@grammerToArray[@@arrayIndex].to_s == 'hbar'
-     # start to contruct the middle sentence
+      # start to contruct the middle sentence
       # We need to determine if the next character contains a ;
 
       if @@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
@@ -151,7 +140,7 @@ class BeginProgram
         @@arrayIndex += 1
         return checkHbarQuery
       else
-        #It doenst have it; therefore we must be at the last command
+        # It doenst have it; therefore we must be at the last command
         @@savedBNFGrammer << @@prevString + '<cmd>'
 
         @@arrayIndex += 1
@@ -167,17 +156,17 @@ class BeginProgram
         # it has it so continue
         @@savedBNFGrammer << @@prevString + '<cmd>; <plot_cmd>'
         @@arrayIndex += 1
-        return checkVbarQuery
+        return checkFillQuery
       else
-        #It doenst have it; therefore we must be at the last command
+        # It doenst have it; therefore we must be at the last command
         @@savedBNFGrammer << @@prevString + '<cmd>'
 
         @@arrayIndex += 1
-        return checkVbarQuery
+        return checkFillQuery
       end # end of ; checker
 
     elsif @@grammerToArray[@@arrayIndex].to_s == 'hbar'
-     # start to contruct the middle sentence
+      # start to contruct the middle sentence
       # We need to determine if the next character contains a ;
 
       if @@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
@@ -187,21 +176,21 @@ class BeginProgram
         @@arrayIndex += 1
         return checkHbarQuery
       else
-        #It doenst have it; therefore we must be at the last command
+        # It doenst have it; therefore we must be at the last command
         @@savedBNFGrammer << @@prevString + '<cmd>'
 
         @@arrayIndex += 1
         return checkFillQuery
       end # end of ; checker
-     
-      #since nothing else has been flag, we have safely reached the end of <plot_cmd>
+
+      # since nothing else has been flag, we have safely reached the end of <plot_cmd>
     elsif @@grammerToArray[@@arrayIndex].to_s == 'end'
       puts 'This is the OFFICIAL END OF THE CODE'
 
-      printBNF#print the resulting grammer 
-      #CODE BY MICHAEL
-      #drawing the parse tree
-      tree = ParseTree.new(@@inputGrammer) 
+      printBNF # print the resulting grammer
+      # CODE BY MICHAEL
+      # drawing the parse tree
+      tree = ParseTree.new(@@inputGrammer)
       tree.draw
       return true
     else
@@ -219,13 +208,13 @@ class BeginProgram
     # the index has already been moved
     # check to see if the size is correct
 
-    #Used to add the end of the cmd
+    # Used to add the end of the cmd
     stringADD = ''
 
-    #check to see if the current array size is 5 
+    # check to see if the current array size is 5
     if @@grammerToArray[@@arrayIndex].size == 5
 
-      #checks to see if ; is in the correct position
+      # checks to see if ; is in the correct position
       if @@grammerToArray[@@arrayIndex].to_s[4, 1] == ';'
 
         # we can continue
@@ -235,17 +224,17 @@ class BeginProgram
       stringADD = ''
     end
 
-    #push to the array
+    # push to the array
     @@savedBNFGrammer << @@prevString + 'vbar <x><y>,<y>' + stringADD
 
     # checks the if the first number is valid
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[0, 1])
 
-      #push to the array
+      # push to the array
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<y>' + stringADD
 
     else
-      #Show an error as the character isnt in the list of 1-7
+      # Show an error as the character isnt in the list of 1-7
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
@@ -262,10 +251,10 @@ class BeginProgram
 
     # checks for ,
     if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ','
-      #do nothing
+      # do nothing
 
     else
-      #Show an error
+      # Show an error
       puts 'Error! unknown symbol at pos: ' + @@grammerToArray[@@arrayIndex].to_s[2, 1] + ' expected , '
 
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
@@ -297,23 +286,23 @@ class BeginProgram
         # move the counter and keep GOING
         @@arrayIndex += 1
 
-        #hey look its that statement again from before
-        #i wonder whats its doing here...
+        # hey look its that statement again from before
+        # i wonder whats its doing here...
         checkNextStatement
         return true
       else
-        #despite all of that, something still wasnt there as expected
-        puts 'Error at pos: ' +  (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 5).to_s +  ' expected ;'
+        # despite all of that, something still wasnt there as expected
+        puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 5).to_s + ' expected ;'
         return false
       end # end internal loop to check for ;
     elsif (@@grammerToArray[@@arrayIndex].size == 4) && (@@grammerToArray[@@arrayIndex + 1].to_s == 'end')
 
       # It must be 4 chars and it closes with and end
-     
-      #Increment the index
+
+      # Increment the index
       @@arrayIndex += 1
 
-      #Yet again...
+      # Yet again...
       checkNextStatement
 
     else # if its not 4 nor 5 then it must be an error
@@ -326,17 +315,16 @@ class BeginProgram
   end # end of checkVbarQuery
 
   def checkHbarQuery
-
-     # the index has already been moved
+    # the index has already been moved
     # check to see if the size is correct
 
-    #Used to add the end of the cmd
+    # Used to add the end of the cmd
     stringADD = ''
 
-    #check to see if the current array size is 5 
+    # check to see if the current array size is 5
     if @@grammerToArray[@@arrayIndex].size == 5
 
-      #checks to see if ; is in the correct position
+      # checks to see if ; is in the correct position
       if @@grammerToArray[@@arrayIndex].to_s[4, 1] == ';'
 
         # we can continue
@@ -346,17 +334,17 @@ class BeginProgram
       stringADD = ''
     end
 
-    #push to the array
+    # push to the array
     @@savedBNFGrammer << @@prevString + 'hbar <x><y>,<x>' + stringADD
 
     # checks the if the first number is valid
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[0, 1])
 
-      #push to the array
+      # push to the array
       @@savedBNFGrammer << @@prevString + 'hbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<x>' + stringADD
 
     else
-      #Show an error as the character isnt in the list of 1-7
+      # Show an error as the character isnt in the list of 1-7
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<x> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
@@ -373,10 +361,10 @@ class BeginProgram
 
     # checks for ,
     if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ','
-      #do nothing
+      # do nothing
 
     else
-      #Show an error
+      # Show an error
       puts 'Error! unknown symbol at pos: ' + @@grammerToArray[@@arrayIndex].to_s[2, 1] + ' expected , '
 
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
@@ -408,23 +396,23 @@ class BeginProgram
         # move the counter and keep GOING
         @@arrayIndex += 1
 
-        #hey look its that statement again from before
-        #i wonder whats its doing here...
+        # hey look its that statement again from before
+        # i wonder whats its doing here...
         checkNextStatement
         return true
       else
-        #despite all of that, something still wasnt there as expected
-        puts 'Error at pos: ' +  (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 5).to_s +  ' expected ;'
+        # despite all of that, something still wasnt there as expected
+        puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 5).to_s + ' expected ;'
         return false
       end # end internal loop to check for ;
     elsif (@@grammerToArray[@@arrayIndex].size == 4) && (@@grammerToArray[@@arrayIndex + 1].to_s == 'end')
 
       # It must be 4 chars and it closes with and end
-     
-      #Increment the index
+
+      # Increment the index
       @@arrayIndex += 1
 
-      #Yet again...
+      # Yet again...
       checkNextStatement
 
     else # if its not 4 nor 5 then it must be an error
@@ -434,17 +422,136 @@ class BeginProgram
     end # end of loop to check if it has 5 chars
 
     true
-
-    
-    
   end # end of checkHbarQuery method
 
-  def checkFillQuery
-   
-  end # END OF checkFillQuery
+  def checkFillQuery; 
+
+  puts @@grammerToArray[@@arrayIndex].to_s
+# the index has already been moved
+    # check to see if the size is correct
+
+    # Used to add the end of the cmd
+    stringADD = ''
+
+    if @@grammerToArray[@@arrayIndex].size == 3
+
+      # checks to see if ; is in the correct position
+      if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ';' and @@grammerToArray[@@arrayIndex+1].to_s != "end"
+
+        # we can continue
+        stringADD = '; <plot_cmd>'
+
+
+      else#it is NOT a ;
+        if  @@grammerToArray[@@arrayIndex].to_s[2, 1] != ';'
+
+            puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; " + @@grammerToArray[@@arrayIndex].to_s + " Expected ;" 
+
+
+        else
+
+            puts "Error at pos: " + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; " + @@grammerToArray[@@arrayIndex].to_s + " Unexpected end found; Expected <cmd>" 
+
+
+        end
+
+      
 
 
 
+
+        
+        return false
+      end
+
+    else
+      puts "ITS DEFINATELY DOENST HAVE IT"
+      stringADD = ''
+    end
+
+
+
+    # push to the array
+    @@savedBNFGrammer << @@prevString + 'fill <x><y>' + stringADD
+
+    # checks the if the first number is valid
+    if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[0, 1])
+
+      # push to the array
+      @@savedBNFGrammer << @@prevString + 'fill ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>' + stringADD
+
+    else
+      # Show an error as the character isnt in the list of 1-7
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y> Where x,y = {1,2,3,4,5,6,7}"
+
+      return false
+    end # end of if statement to check for the first input
+
+
+    if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[1, 1])
+
+      @@savedBNFGrammer << @@prevString + 'fill ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1]  + stringADD
+    else
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y> Where x,y = {1,2,3,4,5,6,7}"
+
+      return false
+    end # end of if statement to check for the second input
+
+
+
+
+
+
+    
+    # after successfully checking all 2 values, we look to see of there is a ; THIS indicate we have a new command to process
+
+    # We need to check if the current index length is correct; with this we can safely compare the ;
+    if (@@grammerToArray[@@arrayIndex].size == 3) && (@@grammerToArray[@@arrayIndex + 1].to_s != 'end')
+
+      if @@grammerToArray[@@arrayIndex].to_s[2, 1] == ';'
+
+        # we need to include the prev string as well
+        @@prevString = @@prevString + "fill" +  @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ';' + ' '
+
+        # move the counter and keep GOING
+        @@arrayIndex += 1
+
+        # hey look its that statement again from before
+        # i wonder whats its doing here...
+        checkNextStatement
+        return true
+      else
+        # despite all of that, something still wasnt there as expected
+        puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + ' expected ;'
+        return false
+      end # end internal loop to check for ;
+
+    elsif (@@grammerToArray[@@arrayIndex].size == 2) && (@@grammerToArray[@@arrayIndex + 1].to_s == 'end')
+
+      # It must be 3 chars and it closes with and end
+
+      # Increment the index
+      @@arrayIndex += 1
+
+      # Yet again...
+      checkNextStatement
+
+    else # if its not 2 nor 3 then it must be an error
+
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "Expected <cmd>"
+      return false
+
+# invalid format; Expected <x>,<y> Where xy = {1,2,3,4,5,6,7}
+
+    end # end of loop to check if it has 5 chars
+
+    true
+
+
+
+
+
+end # END OF checkFillQuery
 
   # TEMP METHOD
 

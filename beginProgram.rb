@@ -29,19 +29,17 @@ class BeginProgram
 
   # save the string input from the user
   def toArray
-    #Take the string and break it at every white space
+    # Take the string and break it at every white space
     @@grammerToArray = @@inputGrammer.split
 
-    #bool for the following function
+    # bool for the following function
     check = false
 
-    #Start to check for any duplicate strings consist of character
-    #By Daniel - Really helpful
+    # Start to check for any duplicate strings consist of character
+    # By Daniel - Really helpful
 
-    #Assign variables into pairs 
+    # Assign variables into pairs
     @@grammerToArray.each_cons(2) do |pair|
-
-
       if ('1234567890').include?(pair.at(0)) == true || ('1234567890').include?(pair.at(1)) == true
       else
         posPush = 0
@@ -49,41 +47,35 @@ class BeginProgram
         if pair.uniq.length == pair.length
         else
 
-          #Hey daniel, is there any variable here that remembers if the duplicate was a to or an end?
-          if pair.at(0).to_s == "to"
-            posPush = 4
-          else
-            posPush = 5
-          end
-          #Error checking for duplicates
-          puts "Error at pos: " +  (@@inputGrammer.index(pair.at(0)) + posPush).to_s + " Duplicate entry \'" + pair.at(0).to_s + "\' was found!"
+          # Hey daniel, is there any variable here that remembers if the duplicate was a to or an end?
+          posPush = if pair.at(0).to_s == 'to'
+                      4
+                    else
+                      5
+                    end
+          # Error checking for duplicates
+          puts 'Error at pos: ' + (@@inputGrammer.index(pair.at(0)) + posPush).to_s + " Duplicate entry \'" + pair.at(0).to_s + "\' was found!"
           check = true
         end
       end
     end
 
-    
-    #if we did NOT detect any duplicate entries then proceed
+    # if we did NOT detect any duplicate entries then proceed
     if !check
       grammerChecker
 
-    else #Detected dupes
+    else # Detected dupes
 
       puts 'Duplicate entries next to each other is not allowed!'
       false
     end
   end # end of toArray method
 
-
   def grammerChecker
-    
-    #a bool flag to see if everything is done currectly
+    # a bool flag to see if everything is done currectly
     isCorrect = checkTo
-
-    # Informs the result to the user
     didWeMakeIt(isCorrect)
   end # end of grammerChecker method
-
 
   def checkTo
     # This validate that the first entry is correct and also peeps to see if the next entry isnt immediately terminated
@@ -102,7 +94,6 @@ class BeginProgram
         # IIRC ruby automatically return the last state of the variable
         checkNextStatement
 
-     
       end # end of checkEnd if statement
 
       true
@@ -131,22 +122,21 @@ class BeginProgram
 
   def checkEnd
     # check to see if the last index is an end and only one instance
-    if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1
+    if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1 && !@@grammerToArray[-1].to_s.include?(";")
 
-      # do nothing
+       # do nothing
 
-      true
+       true
 
-    # Detected Multiple ends 
+    # Detected Multiple ends
 
-    ##DEFUNCT AS MULTIPLE END CHECKS HAPPENED AT THE START
+    # #DEFUNCT AS MULTIPLE END CHECKS HAPPENED AT THE START
     elsif @@grammerToArray.grep('end').size.to_i > 1
 
       puts 'Error! Multiple "end" found; Only 1 is allowed! '
-      
+
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@grammerToArray.length - 1].to_s) + 1).to_s
 
-      
       false
 
     # Detects if its not properly closed
@@ -160,8 +150,7 @@ class BeginProgram
 
   # This deals with the middle <plot_cmd>
   def checkNextStatement
-#TESTING
-
+    # TESTING
 
     # it will iterate auto
     if @@grammerToArray[@@arrayIndex].to_s == 'vbar'
@@ -245,6 +234,8 @@ class BeginProgram
       # drawing the parse tree
       tree = ParseTree.new(@@inputGrammer)
       tree.draw
+      # Informs the result to the user
+     
       return true
     else
 
@@ -296,7 +287,7 @@ class BeginProgram
     # checks the if the second number is valid
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[1, 1])
 
-         # push to the array
+      # push to the array
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>' + stringADD
     else
       # Show an error as the character isnt in the list of 1-7
@@ -311,7 +302,7 @@ class BeginProgram
 
     else
       # Show an error
-      
+
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected ,"
 
       return false
@@ -320,12 +311,12 @@ class BeginProgram
     # checks for FOURTH POS
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[3, 1])
 
-        #push 
+      # push
       @@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',' + @@grammerToArray[@@arrayIndex].to_s[3, 1] + stringADD
 
     else
 
-      #show Error
+      # show Error
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 4).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<y> Where x,y = {1,2,3,4,5,6,7}"
       return false
 
@@ -410,10 +401,10 @@ class BeginProgram
 
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[1, 1])
 
-      #push
+      # push
       @@savedBNFGrammer << @@prevString + 'hbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',<y>' + stringADD
     else
-      #show error
+      # show error
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 2).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<x> Where x,y = {1,2,3,4,5,6,7}"
 
       return false
@@ -434,11 +425,11 @@ class BeginProgram
     # checks for FOURTH POS
     if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[3, 1])
 
-        #push
+      # push
       @@savedBNFGrammer << @@prevString + 'hbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + @@grammerToArray[@@arrayIndex].to_s[1, 1] + ',' + @@grammerToArray[@@arrayIndex].to_s[3, 1] + stringADD
 
     else
-      #show error
+      # show error
       puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 4).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Expected format: <x><y>,<x> Where x,y = {1,2,3,4,5,6,7}"
       return false
 
@@ -478,8 +469,8 @@ class BeginProgram
 
     else # if its not 4 nor 5 then it must be an error
 
-     puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Unexpected closure ';' but command continued"
-return false
+      puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 1).to_s + "; '" + @@grammerToArray[@@arrayIndex].to_s + "' Unexpected closure ';' but command continued"
+      return false
     end # end of loop to check if it has 5 chars
 
     true
@@ -509,7 +500,7 @@ return false
         else
 
           puts 'Error at pos: ' + (@@inputGrammer.index(@@grammerToArray[@@arrayIndex].to_s) + 3).to_s + '; ' + @@grammerToArray[@@arrayIndex].to_s + ' Unexpected end found; Expected <cmd>'
-          
+
           return false
         end
 

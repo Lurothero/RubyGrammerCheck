@@ -68,7 +68,9 @@ This will always return false
 @@grammerToArray.each_cons(2) do |pair|
       if ('1234567890').include?(pair.at(0)) == true || ('1234567890').include?(pair.at(1)) == true
 
-*Ill let Daniel explain that
+This uses the each_cons method first to break the array into smaller arrays of  pairs[string1, string2] to compare each pair and find duplicates easily. 
+Then checkers to see if there are any numbers in paris arrays to discard them.
+
 
 
 @@grammerToArray[0].to_s == 'to'

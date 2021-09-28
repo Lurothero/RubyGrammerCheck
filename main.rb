@@ -38,7 +38,7 @@ until isExitEntered
     puts "Valid code example:"
     puts "to vbar 22,2 end"#this aint valid kek
     puts ""
-    puts "Valid code eample for multiple input's at a time:"
+    puts "Valid code example for multiple input's at a time:"
     puts "to vbar 22,2; fill 33; hbar 32,1 end"
     puts ""
 

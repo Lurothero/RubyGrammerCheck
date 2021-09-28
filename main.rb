@@ -68,8 +68,6 @@ until isExitEntered
   when 'HELP'
     puts "To stop the program enter: STOP"
     puts ""
-    
-    puts ""
     puts "Valid code example:"
     puts "to vbar 22,2 end"#this aint valid kek
     puts ""

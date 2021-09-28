@@ -1,0 +1,132 @@
+This file has no effect on any code but only served as a point of reference on how this code work.
+
+The relative flow of the code goes like this:
+
+Main -> Create a New object -> Store the user input -> Process output -> Return to Loop until otherwise
+
+Process output can be broken down further
+->Break the input into array elements
+  -> Check for duplicate entries next to each other 
+  ->This prevents the program to incorrectly displaying error messages
+     ->Call GrammerChecker 
+	      ->GrammerChecker calls on checkTo
+	        -> checkTo method calls on checkEnd
+	        -> After passing checkEnd test; checkTo calls checkNextStatement
+		        ->checkNextStatement determine that is the next command in the array 
+		          ->Depending on the input checkNextStatement will call either checkVbarQuery, checkHbarQuery, checkFillQuery
+			        -> checkVbarQuery, checkHbarQuery, checkFillQuery will call checkNextStatement
+				->This starts the recursive process
+			->After reaching the last array element, this stops the recursion.
+		->The saved BNF grammer is printed along with the parse tree
+	->This will return true back to grammerChecker
+->This will return a feedback indicating if it executed successfully or not
+->Program return back to main and the process is performed until the user stops
+
+
+Stripping back everything
+
+Lets assume the input s = "to vbar 11,1 end"
+
+Main
+->BeginProgram.new(s)
+  ->initialize(s)
+    ->toArray
+      ->grammerChecker
+        ->checkTo
+          ->checkNextStatement |recursion starts|
+            ->checkVbarQuery
+              ->checkNextStatement ==|recursion ends|
+                -> printBNF (If no error occurred)
+
+
+Now lets look at interesting snippets of code
+
+
+ def initialize(getCommand)
+  
+    @@inputGrammer = 0
+    @@grammerToArray = 0
+    @@arrayIndex = 0
+    @@savedBNFGrammer = []
+    @@prevString = ''
+    @@inputGrammer = getCommand.chomp
+
+  end 
+This will reset all of the initialized variable. 
+
+
+getCommand.chomp
+
+chomp is a string method that allows us to compare input.
+In Ruby you cannot compare like this :
+getCommand == "string"
+
+This will always return false
+
+
+
+@@grammerToArray.each_cons(2) do |pair|
+      if ('1234567890').include?(pair.at(0)) == true || ('1234567890').include?(pair.at(1)) == true
+
+*Ill let Daniel explain that
+
+
+@@grammerToArray[0].to_s == 'to'
+
+This makes us compare the value in the current position of the array index. .to_s is required for converting data to string
+
+
+@@savedBNFGrammer << @@prevString + '<plot_cmd>'
+
+savedBNFGrammer is an array that we used. This functions as to save all the <plot_cmd> generated
+<< - is another way of pushing data into the array
+
+
+@@inputGrammer.index(@@grammerToArray[0].to_s) + 1).to_s 
+
+inputGrammer is the original string that the user entered
+
+In short this line says 
+  Using the array string to find the location within the original string
+  
+Plus 1 is needed since the array is 0 index and .to_s is just to convert the result into a string
+
+
+@@grammerToArray.grep('end').size.to_i
+
+grep counts the number of times a given string occured in a larger string
+
+
+@@grammerToArray[@@arrayIndex + 1].to_s.include? ';'
+
+include? returns either true or false if a string contained a character
+
+
+if ('1234567').include?(@@grammerToArray[@@arrayIndex].to_s[0, 1])
+
+This is a basis for validation checks for certain characters
+At first we tried:
+   ThisArrayIndexString contains these values (1..7)?
+
+But it didnt work so we decided to just flip the values
+  Does (1..7) contains the value ThisArrayIndexString
+ 
+
+https://pics.me.me/if-i-cant-hit-you-with-the-hammer-then-ll-55518311.png
+
+This is a more optimal way of typing if this array  = 1 or array = 2 etc 
+
+
+
+@@savedBNFGrammer << @@prevString + 'vbar ' + @@grammerToArray[@@arrayIndex].to_s[0, 1] + ' <y>,<y>' + stringADD
+
+This line is many string being attached and push it into the array
+@@prevString adds the previous results of pass recursion
+stringAdd adds <cmd> or <cmd> ; < plot_cmd > after checking if the next value contains a ;
+
+
+
+@@grammerToArray[@@arrayIndex].to_s[2, 1]
+In the [i,n], i is the starting index of the string, n is to return how many characters after n 
+
+For example, "Hello" [3,2] - > returns "lo"; 3 is a 0 based index

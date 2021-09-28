@@ -37,6 +37,11 @@ Evaluation 4
 
 
 puts 'Starting Project...'
+puts ""
+puts ""
+puts ""
+puts "Current Bugs: Certain text will cause a false positive"
+puts "However this is only a visual bug and the program will work as intended"
 
 require_relative 'beginProgram'
 

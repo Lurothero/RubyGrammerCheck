@@ -74,7 +74,7 @@ class BeginProgram
   def grammerChecker
     # a bool flag to see if everything is done currectly
     isCorrect = checkTo
-    didWeMakeIt(isCorrect)
+    
   end # end of grammerChecker method
 
   def checkTo
@@ -122,10 +122,10 @@ class BeginProgram
 
   def checkEnd
     # check to see if the last index is an end and only one instance
-    if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1 && !@@grammerToArray[-1].to_s.include?(";")
+    if (@@grammerToArray[@@grammerToArray.length - 1].to_s == 'end') && @@grammerToArray.grep('end').size.to_i == 1 
 
        # do nothing
-
+puts @@grammerToArray[-2].to_s.include?(";").to_s + "TESTING"
        true
 
     # Detected Multiple ends
@@ -234,6 +234,7 @@ class BeginProgram
       # drawing the parse tree
       tree = ParseTree.new(@@inputGrammer)
       tree.draw
+      didWeMakeIt(isCorrect)
       # Informs the result to the user
      
       return true

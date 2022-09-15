@@ -14,8 +14,8 @@ checks out before inputting into my program
 on another note besides creating the object the only function you should call is
 .draw
 
-that function will draw the actual parse tree
 
+that function will draw the actual parse tree
 -michael
 =end
 
